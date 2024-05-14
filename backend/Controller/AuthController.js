@@ -3,20 +3,31 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const handleSignIn = async (req, res) => {
     try {
-        let { email, password } = req.body;
-        if (email && password) {
+        let { email, password, passwordConfirm } = req.body;
+        if (email && password && passwordConfirm) {
             //check if email already exists
             const isEmailExists = await UserModel.findOne({ email });
             if (!isEmailExists) {
-                //hash password 
-                const salt = await bcrypt.genSalt(10);
-                password = await bcrypt.hash(password, salt);
-                const User = new UserModel({ email, password });
-                await User.save();
-                res.status(200).json({
-                    succes: true,
-                    message: "User Registered Succesful",
-                });
+                if (password === passwordConfirm) {
+                    //hash password 
+                    const salt = await bcrypt.genSalt(10);
+                    password = await bcrypt.hash(password, salt);
+                    const User = new UserModel({ email, password });
+                    await User.save();
+                    res.status(200).json({
+                        succes: true,
+                        message: "User Registered Succesful",
+                    });
+                }
+                else
+                {
+                    res.status(401)
+                    .json({
+                        succes:false,
+                        messagge:"Password Not Match"
+                    })
+                }
+
             }
             else {
                 //email already registered
@@ -40,10 +51,9 @@ const handleSignIn = async (req, res) => {
     }
 };
 const handleLogin = async (req, res) => {
-
     try {
-
         const { email, password } = req.body;
+        console.log(req.body);
         if (email && password) {
             const isEmailExists = await UserModel.findOne({ email });
             if (isEmailExists) {

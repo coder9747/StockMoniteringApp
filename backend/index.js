@@ -3,6 +3,7 @@ const cors = require("cors");
 const connect = require("./Database/db.js");
 const AuthRouter = require("./Router/AuthRouter.js");
 const dotenv = require("dotenv");
+const WishListRouter = require("./Router/WatchListRouter.js");
 
 const app = express();
 
@@ -13,6 +14,7 @@ dotenv.config();
 
 
 app.use("/api/v1/auth",AuthRouter);
+app.use("/api/v1/wishlist",WishListRouter);
 
 
 

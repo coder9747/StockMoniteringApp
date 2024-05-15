@@ -30,6 +30,8 @@ const getChange = async (req, res) => {
                     data: {
                         metaData,
                         formatedChange,
+                        openingPrice,
+                        closingPrice,
                     }
                 })
         }
@@ -54,7 +56,7 @@ const getIntradayStockData = async (req, res) => {
         const { symbol, interval } = req.query;
         if (symbol && interval) {
             const apiKey = process.env.api_key;
-            const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=${interval}min&outputsize=compact&apikey=${apiKey}`);
+            const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=${interval}min&outputsize=compact&apikey=${apiKey}`);
             const data = await response.json();
             res.status(200)
                 .json({

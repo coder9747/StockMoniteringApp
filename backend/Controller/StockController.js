@@ -1,3 +1,4 @@
+const dummyData = require("./dummyData.js");
 const calculateChange = (openPrice, closePrice) => {
     return ((closePrice - openPrice) / openPrice) * 100;
 };
@@ -9,12 +10,11 @@ const formatChange = (change) => {
 
 
 const getChange = async (req, res) => {
-
     try {
         const { symbol } = req.query;
         if (symbol) {
             const apiKey = process.env.api_key;
-            const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=60min&outputsize=compact&apikey=${apiKey}`);
+            const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=60min&outputsize=compact&apikey=${apiKey}`);
             const data = await response.json();
             const metaData = data['Meta Data'];
             let tempArr = Object.values(data['Time Series (60min)']);
@@ -42,6 +42,7 @@ const getChange = async (req, res) => {
                 })
         }
     } catch (error) {
+        console.log(error.message);
         res.status(500)
             .json({
                 succes: false,
@@ -82,5 +83,17 @@ const getIntradayStockData = async (req, res) => {
     }
 }
 
+const getDummyStockData = async (req, res) => {
+    try {
+        res.json(dummyData);
+    } catch (error) {
+        res.status(500)
+            .json({
+                succes: false,
+                message: "Internal Server Error",
+            })
+    }
+}
 
-module.exports = { getChange, getIntradayStockData };
+
+module.exports = { getChange, getIntradayStockData,getDummyStockData };

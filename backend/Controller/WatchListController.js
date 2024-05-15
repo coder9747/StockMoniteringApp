@@ -12,6 +12,7 @@ const getUserWatchList = async (req, res) => {
                 message: "Succes",
             })
     } catch (error) {
+      
         res.status(500).json({
             succes: false,
             message: "Internal Server Error",

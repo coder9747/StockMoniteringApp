@@ -13,7 +13,6 @@ app.use(cors());
 app.use(express.json());
 dotenv.config();
 
-
 app.use("/api/v1/auth",AuthRouter);
 app.use("/api/v1/wishlist",WishListRouter);
 app.use('/api/v1/stock',StockRouter);

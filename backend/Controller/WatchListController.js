@@ -3,7 +3,8 @@ const WatchList = require("../Schema/WatchListSchema.js");
 const getUserWatchList = async (req, res) => {
     try {
         const id = req.user._id;
-        const UserWatchList = await WatchList.find({ userId: id });
+        //excluded user id for security purpose
+        const UserWatchList = await WatchList.find({ userId: id },{userId:0});
         res.status(200)
             .json({
                 payload: UserWatchList,

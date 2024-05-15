@@ -7,13 +7,13 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 
 const navigation = [
-    { name: 'Product', href: '#' },
-    { name: 'Features', href: '#' },
-    { name: 'Marketplace', href: '#' },
-    { name: 'Company', href: '#' },
+    { name: 'Watchlist', href: '#' },
+
 ]
 
 
@@ -27,7 +27,11 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Example() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.reload();
+    }
     return (
         <div className="bg-white">
             <header className="absolute inset-x-0 top-0 z-50">
@@ -60,9 +64,12 @@ export default function Example() {
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                            Log in <span aria-hidden="true">&rarr;</span>
-                        </a>
+                        {
+                            !localStorage.getItem("token") ? <Link to={'/signin'} className="text-sm font-semibold leading-6 text-gray-900">
+                                Log in <span aria-hidden="true">&rarr;</span>
+                            </Link> : <Link onClick={handleLogout}>Log out</Link>
+                        }
+
                     </div>
                 </nav>
                 <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -138,27 +145,18 @@ export default function Example() {
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
-                                    <OutlinedCard />
+                                    <OutlinedCard symbol={'NIFTY'} />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <OutlinedCard />
+                                    <OutlinedCard symbol={'IBM'} />
                                 </Grid>
                             </Grid>
                         </Box>
+                        <Link to={'/watchlist'} style={{ fontSize: '1.2rem' }}>Checkout WatchList</Link>
+
                     </div>
                 </div>
-                <div
-                    className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-                    aria-hidden="true"
-                >
-                    <div
-                        className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-                        style={{
-                            clipPath:
-                                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                        }}
-                    />
-                </div>
+
             </div>
         </div>
     )

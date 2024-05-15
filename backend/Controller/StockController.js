@@ -12,7 +12,6 @@ const getChange = async (req, res) => {
 
     try {
         const { symbol } = req.query;
-
         if (symbol) {
             const apiKey = process.env.api_key;
             const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=60min&outputsize=compact&apikey=${apiKey}`);

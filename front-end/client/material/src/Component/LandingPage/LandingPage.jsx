@@ -9,11 +9,11 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
+import url from "./images/favicon.png";
 
 
 const navigation = [
-    { name: 'Watchlist', href: '#' },
-
+    { name: 'Watchlist', href: '/watchlist' },
 ]
 
 
@@ -41,7 +41,7 @@ export default function Example() {
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                src={url}
                                 alt=""
                             />
                         </a>
@@ -58,9 +58,9 @@ export default function Example() {
                     </div>
                     <div className="hidden lg:flex lg:gap-x-12">
                         {navigation.map((item) => (
-                            <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+                            <Link key={item.name} to={item.href} className="text-sm font-semibold leading-6 text-gray-900">
                                 {item.name}
-                            </a>
+                            </Link>
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -80,7 +80,7 @@ export default function Example() {
                                 <span className="sr-only">Your Company</span>
                                 <img
                                     className="h-8 w-auto"
-                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                    src={url}
                                     alt=""
                                 />
                             </a>
@@ -107,12 +107,11 @@ export default function Example() {
                                     ))}
                                 </div>
                                 <div className="py-6">
-                                    <a
-                                        href="#"
-                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                    >
-                                        Log in
-                                    </a>
+                                    {
+                                        !localStorage.getItem("token") ? <Link to={'/signin'} className="text-sm font-semibold leading-6 text-gray-900">
+                                            Log in <span aria-hidden="true">&rarr;</span>
+                                        </Link> : <Link onClick={handleLogout}>Log out</Link>
+                                    }
                                 </div>
                             </div>
                         </div>

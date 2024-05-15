@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CanvasJSReact from '@canvasjs/react-stockcharts';
 import { Button, ButtonGroup, Typography } from '@mui/material';
+import { Link, useSearchParams } from "react-router-dom";
+import MyTable from "./Table/Table";
+import { UserContext } from "../../Context/userContext";
+
+const url  = 'https://stockmoniteringapp.onrender.com';
 
 const CanvasJS = CanvasJSReact.CanvasJS;
 const CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
 
-const App = () => {
+const App = (prop) => {
     const [dataPoints1, setDataPoints1] = useState([]);
     const [dataPoints2, setDataPoints2] = useState([]);
     const [dataPoints3, setDataPoints3] = useState([]);
@@ -13,8 +18,13 @@ const App = () => {
     const [timeInterval, setTimeInterval] = useState(1);
     const [time, setTime] = useState({});
     const [metaData, setMetadata] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [dummyData, setDummyData] = useState([]);
+    const state = searchParams.get("symbol");
+    const { setLoading } = useContext(UserContext);
 
     useEffect(() => {
+        setLoading(true);
         fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=${timeInterval}min&apikey=demo`)
             .then(val => val.json())
             .then((data) => {
@@ -50,10 +60,43 @@ const App = () => {
                 setDataPoints3(dsp3);
                 setIsLoaded(true);
             })
-    }, [timeInterval]);
+            .catch(err => {
+                console.log(err);
+            }
+            )
+        setLoading(false);
+    }, [timeInterval, state]);
+    useEffect(() => {
+        console.log('rendered');
+        const fetchData = async () => {
+            // setLoading(true);
+            try {
+
+                const response = await fetch(`${url}/api/v1/stock/get-stock-dummy-data`);
+                const data = await response.json();
+                const dummyData = Object.keys(data['Time Series (5min)']).map(time => {
+                    return {
+                        time,
+                        open: data['Time Series (5min)'][time]['1. open'],
+                        close: data['Time Series (5min)'][time]['4. close'],
+                        high: data['Time Series (5min)'][time]['2. high'],
+                        low: data['Time Series (5min)'][time]['3. low'],
+                        volume: data['Time Series (5min)'][time]['5. volume'],
+                    }
+                }
+                );
+                setDummyData(dummyData)
+            } catch (error) {
+                console.log(error.message);
+            }
+            // setLoading(false);
+
+        }
+        fetchData();
+
+    }, [state])
 
     const handleButtonClick = (range) => {
-        // Implement your logic for handling button clicks here
         console.log(`Selected range: ${range}`);
     };
 
@@ -61,7 +104,7 @@ const App = () => {
     const options = {
         theme: "light2",
         title: {
-            text: "React StockChart with Date-Time Axis"
+            text: 'Stock Data'
         },
         subtitles: [{
             text: "Price-Volume Trend"
@@ -147,6 +190,9 @@ const App = () => {
 
     return (
         <div>
+            <Link to={'/'}>
+                <Typography  >Home</Typography>
+            </Link>
             <div>
                 {isLoaded && (
                     <CanvasJSStockChart containerProps={containerProps} options={options} />
@@ -164,7 +210,7 @@ const App = () => {
                         <Button onClick={() => handleButtonClick('60m')}>60m</Button>
                     </ButtonGroup>
                 </div>
-                {/* Add other components as needed */}
+                <MyTable rows={dummyData} />
             </div>
         </div>
     );

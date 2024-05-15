@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 
-let url = "http://localhost:4500/api/v1";
+let url = "https://stockmoniteringapp.onrender.com/api/v1";
 
 
 // TODO remove, this demo shouldn't need to reset the theme.

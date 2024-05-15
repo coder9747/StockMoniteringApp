@@ -4,6 +4,7 @@ const connect = require("./Database/db.js");
 const AuthRouter = require("./Router/AuthRouter.js");
 const dotenv = require("dotenv");
 const WishListRouter = require("./Router/WatchListRouter.js");
+const StockRouter = require("./Router/StockRouter.js");
 
 const app = express();
 
@@ -15,6 +16,7 @@ dotenv.config();
 
 app.use("/api/v1/auth",AuthRouter);
 app.use("/api/v1/wishlist",WishListRouter);
+app.use('/api/v1/stock',StockRouter);
 
 
 

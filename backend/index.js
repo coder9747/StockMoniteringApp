@@ -34,10 +34,10 @@ app.use('/api/v1/stock',StockRouter);
 
 
 
+const port = process.env.PORT || 10000;
 
 
-
-app.listen(4500,()=>
+app.listen(port,()=>
 {
 
     connect();

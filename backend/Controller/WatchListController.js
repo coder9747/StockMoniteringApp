@@ -82,4 +82,5 @@ const removeSymbol = async (req, res) => {
     }
 }
 
+
 module.exports = { getUserWatchList, removeSymbol, addUserSymbol };

@@ -53,8 +53,7 @@ export default function SignIn() {
                     //saving token to localStorage
                     localStorage.setItem("token",token);
                     setLoading(false);
-
-                    navigate("/home");
+                    navigate("/");
                 }
                 setLoading(false);
             }

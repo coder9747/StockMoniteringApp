@@ -136,7 +136,7 @@ export default function Example() {
 
                     <div className="text-center">
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                            Moniter Your Faviorate Stocks Data
+                            Moniter Your Favourite Stocks Data
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
                             Stay ahead of the curve with real-time insights. Your trusted companion for tracking stocks, trends, and market movements.
